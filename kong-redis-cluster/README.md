@@ -54,6 +54,10 @@ Thus , if want to connect to redis which is in cluster mode , then we can not us
 
 #### Sample Images :
 
+**redis-cli cluster info**
+
+![SET redis key](https://raw.githubusercontent.com/paraspatidar/kong/refs/heads/main/kong-redis-cluster/redis-cli.png)
+
 
 **Setting value**
   
