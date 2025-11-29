@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # 1. Define the 3 Redis Master Nodes
+  redis-master-1: &redis-master-common # Anchor for shared settings
+    image: redis:7.2-alpine # Stable image with lower footprint
+    command: redis-server /usr/local/etc/redis/redis.conf
+    # The default Redis port
+    ports:
+      - "6379:6379"
+    volumes:
+      # Map the custom configuration file
+      - ./redis-cluster.conf:/usr/local/etc/redis/redis.conf
+    hostname: redis-master-1
+    container_name: redis-master-1
+    networks:
+      - redis-cluster-net
+
+  redis-master-2:
+    <<: *redis-master-common # Inherit common settings
+    ports:
+      - "6380:6379"
+    hostname: redis-master-2
+    container_name: redis-master-2
+
+  redis-master-3:
+    <<: *redis-master-common # Inherit common settings
+    ports:
+      - "6381:6379"
+    hostname: redis-master-3
+    container_name: redis-master-3
+
+  # 2. Bootstrap Service (One-time command to form the cluster)
+  redis-cluster-init:
+    image: redis:7.2-alpine
+    # This command uses redis-cli to create the cluster with the three masters,
+    # and assigns all 16384 hash slots.
+    command: >
+      sh -c "
+        sleep 5 && # Wait for nodes to start
+        redis-cli --cluster create redis-master-1:6379  redis-master-2:6379  redis-master-3:6379  --cluster-replicas 0 --cluster-yes"
+    depends_on:
+      - redis-master-1
+      - redis-master-2
+      - redis-master-3
+    networks:
+      - redis-cluster-net
+
+networks:
+  redis-cluster-net:
+    driver: bridge
+    name: redis-cluster-net
