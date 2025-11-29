@@ -6,7 +6,9 @@ The default kong OSS’s rate limiting and bundle comes with [open restly redis 
 
 Thus , if want to connect to redis which is in cluster mode , then we can not use that [lua-resty-redis](https://github.com/openresty/lua-resty-redis) client.
 
-=============
+------------
+
+
 
 ### The Solutions :
 
@@ -14,7 +16,9 @@ Thus , if want to connect to redis which is in cluster mode , then we can not us
 2.  Then after that , various developers forked it and created their own improved libraries.
 3.  KongHowever , in this post , we shall use the one which comes from house of Kong itself as its in their github repo and so far well maintained , ref : [https://github.com/Kong/resty-redis-cluster](https://github.com/Kong/resty-redis-cluster)
 
-=============
+------------
+
+
 
 ### High Level Approach :
 
@@ -28,7 +32,9 @@ Thus , if want to connect to redis which is in cluster mode , then we can not us
 8. Register the redis plugin  in kong.
 9.  Make some test API calls to verify redis SET & GET.
 
-=============
+------------
+
+
 
 ### GitHub Repo with Instructions :
 *Below files are windows compatible.*
@@ -42,20 +48,28 @@ Thus , if want to connect to redis which is in cluster mode , then we can not us
 6. If above response header is not present  , then refer to setup container logs or kong logs.
 7. **Test GET** :Run a test api call from any http client or ui and pass required header as `action:get` ,`key:abc`, here we are instruction to GET in redis with KEY as `abc` this will fetch the previously set  VALUE `xyz`. On success the response should contain a header `x-res` with value as `xyz`.
 
-=============
+------------
+
+
 
 #### Sample Images :
+
+
 **Setting value**
   
 
 ![SET redis key](https://raw.githubusercontent.com/paraspatidar/kong/refs/heads/main/kong-redis-cluster/set-redis-key.png)
+
+------------
 
 
 **Getting value**
 
 ![GET the value of key form redis](https://raw.githubusercontent.com/paraspatidar/kong/refs/heads/main/kong-redis-cluster/get-redis-key.png)
 
-=============
+------------
+
+
 
 #### References :
 
